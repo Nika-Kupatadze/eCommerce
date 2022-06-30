@@ -1,5 +1,7 @@
 <?php
 
+use core\base\exceptions\RouteException;
+
 defined('VG_ACCESS') or die('Access Denied!');
 
 const TEMPLATE = 'templates/default/';
@@ -17,3 +19,18 @@ const ADMIN_CSS_JS = [
     'styles' => [],
     'scripts' => [],
 ];
+
+
+/**
+ * @throws RouteException
+ */
+function autoloadMainClasses($class_name)
+{
+    $class_name = str_replace('\\', '/', $class_name);
+
+    if (!@include_once $class_name . '.php') {
+        throw new RouteException('Invalid name for file - ' . $class_name);
+    }
+}
+
+spl_autoload_register('autoloadMainClasses');
